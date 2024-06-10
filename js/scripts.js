@@ -22,8 +22,7 @@ let pokemonRepository = (function () {
     listItem.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'mb-4'); // Responsive column classes and margin-bottom
 
     let button = document.createElement('button');
-    button.innerHTML = `<div>  </div>
-                        <p> ${pokemon.name} </p>`;
+    button.innerHTML = `${pokemon.name}`;
     //button.innerText = `${pokemon.name}`;
     button.classList.add('btn', 'btn-light');
     button.setAttribute('data-bs-toggle', 'modal');

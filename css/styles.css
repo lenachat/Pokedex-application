@@ -8,3 +8,11 @@ body {
   list-style-type: none;
   padding: 0;
 }
+
+li button {
+  text-transform: capitalize;
+}
+
+.modal-title {
+  text-transform: capitalize;
+}
