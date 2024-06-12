@@ -22,15 +22,35 @@ let pokemonRepository = (function () {
 
     listItem = document.createElement('li');
     listItem.classList.add('col-12', 'col-sm-6', 'col-md-4', 'col-lg-3', 'mb-4'); // Responsive column classes and margin-bottom
+    listItem.setAttribute('style', 'height: 180px');
 
     let button = document.createElement('button');
-    button.innerText = `${pokemon.name}`;
-    button.classList.add('btn', 'btn-light', 'border', 'shadow');
+    button.innerHTML = `
+    <div style="display: flex; flex-direction: column; height: 100%; align-items: center; justify-content: space-between;">
+      <div style="flex-grow: 1; display: flex; align-items: center;">
+      <img src="${pokemon.staticUrl}" data-gif="${pokemon.gifUrl}" data-static="${pokemon.staticUrl}" style="max-width: 100%; max-height: 100%;">
+      </div>
+      <div style="width: 100%; text-align: center;">
+        <p style="margin: 0;">${pokemon.name}</p>
+      </div>
+    </div>`;
+
+    button.classList.add('btn', 'btn-light', 'border-dark', 'shadow', 'w-100', 'h-100');
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#pokemonModal');
 
     listItem.appendChild(button);
     listOfPokemons.appendChild(listItem);
+
+    button.addEventListener('mouseenter', function () {
+      let img = button.querySelector('img');
+      img.src = img.getAttribute('data-gif');
+    });
+
+    button.addEventListener('mouseleave', function () {
+      let img = button.querySelector('img');
+      img.src = img.getAttribute('data-static');
+    });
 
     button.addEventListener('click', function () {
       showDetails(pokemon);
@@ -46,7 +66,10 @@ let pokemonRepository = (function () {
           name: item.name,
           detailsUrl: item.url,
         };
-        add(pokemon);                     // add function is called to pass each pokemon object to the pokemonList
+        add(pokemon);
+        loadDetails(pokemon).then(function () {
+          addListItem(pokemon);           // Load details before adding the list item
+        });                     // add function is called to pass each pokemon object to the pokemonList
       });
     }).catch(function () {
       console.log('error finding pokemon');
@@ -60,9 +83,11 @@ let pokemonRepository = (function () {
     }).then(function (details) {               //adding specific properties to item object
       item.imageUrl = details.sprites.other["official-artwork"].front_default;
       item.gifUrl = details.sprites.other.showdown.front_default;
+      item.staticUrl = details.sprites.front_default;
       item.height = details.height / 10;
       item.types = details.types;
       item.weight = details.weight / 10;
+      item.abilities = details.abilities;
     }).catch(function () {
       console.log('error loading pokemon details');
     });
@@ -95,14 +120,14 @@ let pokemonRepository = (function () {
       let type = item.types[0].type.name;
       let color = colorCode(type);
       modalHeader.style.backgroundImage = `linear-gradient(to right, white, ${color})`;
-
     };
 
     modalBody.innerHTML = `
       <img src="${item.imageUrl}" class="img-fluid" alt="${item.name}" style="width: 40%">
       <p>Height: ${item.height} m</p>
       <p>Weight: ${item.weight} kg</p>
-      <p>Type: ${item.types.map(typeInfo => typeInfo.type.name).join(', ')}</p>`;
+      <p>Type: ${item.types.map(typeInfo => typeInfo.type.name).join(', ')}</p>
+      <p>Abilities: ${item.abilities.map(typeInfo => typeInfo.ability.name).join(', ')}</p>`;
   }
 
   function colorCode(type) {
@@ -143,6 +168,8 @@ let pokemonRepository = (function () {
 
 pokemonRepository.loadList().then(function () {
   pokemonRepository.getAll().forEach(function (pokemon) {
-    pokemonRepository.addListItem(pokemon);
+    pokemonRepository.loadDetails(pokemon).then(function () {
+      pokemonRepository.addListItem(pokemon);
+    });
   });
 });
