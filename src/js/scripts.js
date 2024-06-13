@@ -31,13 +31,15 @@ let pokemonRepository = (function () {
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#pokemonModal');
 
+    button.setAttribute('tabindex', '0');
+    button.setAttribute('aria-label', `Details about ${pokemon.name}`);
 
     let buttonContent = document.createElement('div');
-    button.setAttribute('alt', `Button for details of Pokemon ${pokemon.name}`)
+
     buttonContent.setAttribute('style', 'height:100%; width:auto');
 
     let buttonImg = document.createElement('img');
-    buttonImg.setAttribute('alt', `Image of Pokemon ${pokemon.name}`)
+    buttonImg.setAttribute('aria-label', `Image of ${pokemon.name}`)
     buttonImg.setAttribute('style', 'height:80%; width:auto');
 
     let buttonText = document.createElement('p');
@@ -191,5 +193,13 @@ pokemonRepository.loadList().then(function () {
     pokemonRepository.loadDetails(pokemon).then(function () {
       pokemonRepository.addListItem(pokemon);
     });
+  });
+});
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      item.querySelector('a').click();
+    }
   });
 });
