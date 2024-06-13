@@ -39,7 +39,7 @@ let pokemonRepository = (function () {
     buttonContent.setAttribute('style', 'height:100%; width:auto');
 
     let buttonImg = document.createElement('img');
-    buttonImg.setAttribute('aria-label', `Image of ${pokemon.name}`)
+    buttonImg.setAttribute('aria-label', `Image of ${pokemon.name}`);
     buttonImg.setAttribute('style', 'height:80%; width:auto');
 
     let buttonText = document.createElement('p');
@@ -170,7 +170,8 @@ let pokemonRepository = (function () {
     filteredList.forEach(pokemon => addListItem(pokemon));
   };
 
-  document.getElementById('search-button').addEventListener('click', function () {
+  document.querySelector('#search-button').addEventListener('click', function (event) {
+    event.preventDefault();
     let searchInput = document.querySelector('#search-input').value;
     filterPokemon(searchInput);
   });
