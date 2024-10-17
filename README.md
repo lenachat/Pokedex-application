@@ -32,12 +32,12 @@ To set up the project locally, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/pokedex-app.git
+    git clone https://github.com/lenachat/Pokedex-application.git
     ```
    
 2. Navigate into the project directory:
     ```bash
-    cd pokedex-app
+    cd Pokedex-application
     ```
 
 3. Open `index.html` in your browser to view the app.
