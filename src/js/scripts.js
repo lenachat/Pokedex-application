@@ -191,9 +191,11 @@ let pokemonRepository = (function () {
 
 pokemonRepository.loadList().then(function () {
   pokemonRepository.getAll().forEach(function (pokemon) {
-    pokemonRepository.loadDetails(pokemon).then(function () {
-      pokemonRepository.addListItem(pokemon);
-    });
+    if (!pokemon.imageUrl) {
+      pokemonRepository.loadDetails(pokemon).then(function () {
+        pokemonRepository.addListItem(pokemon);
+      });
+    }
   });
 });
 
